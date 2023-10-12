@@ -35,6 +35,8 @@ import warnings
 
 import torch
 import transformers
+from transformers.utils import is_accelerate_available, is_bitsandbytes_available
+
 from intel_extension_for_transformers.transformers import (
     BitsAndBytesConfig,
     MixedPrecisionConfig,
@@ -42,12 +44,11 @@ from intel_extension_for_transformers.transformers import (
     WeightOnlyQuantConfig,
 )
 from intel_extension_for_transformers.transformers.utils.utility import (
-    logger,
     LazyImport,
     generate_dummy_past_key_values,
     get_example_inputs_for_trace,
+    logger,
 )
-from transformers.utils import is_accelerate_available, is_bitsandbytes_available
 
 torch = LazyImport("torch")
 
@@ -58,6 +59,7 @@ class _BaseQBitsAutoModelClass:
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
         import intel_extension_for_transformers.transformers.modeling.modeling_map
+
         load_in_8bit = kwargs.pop("load_in_8bit", False)
         load_in_4bit = kwargs.pop("load_in_4bit", False)
         quantization_config = kwargs.pop("quantization_config", None)
@@ -74,8 +76,7 @@ class _BaseQBitsAutoModelClass:
         if load_in_8bit or load_in_4bit:
             use_cpu = (
                 True
-                if device_map == torch.device("cpu")
-                or device_map == "cpu"
+                if device_map == torch.device("cpu") or device_map == "cpu"
                 else False
             )
             if (
@@ -274,3 +275,7 @@ class AutoModel(_BaseQBitsAutoModelClass):
 
 class AutoModelForSeq2SeqLM(_BaseQBitsAutoModelClass):
     ORIG_MODEL = transformers.AutoModelForSeq2SeqLM
+
+
+class AutoModelForTokenClassification(_BaseQBitsAutoModelClass):
+    ORIG_MODEL = transformers.AutoModelForTokenClassification

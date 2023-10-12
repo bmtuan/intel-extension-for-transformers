@@ -35,23 +35,24 @@ from .distillation import (
     DistillationCriterionMode,
 )
 from .mixture.auto_distillation import AutoDistillation
+from .modeling import (
+    AutoModel,
+    AutoModelForCausalLM,
+    AutoModelForSeq2SeqLM,
+    AutoModelForTokenClassification,
+    OptimizedModel,
+)
 from .nas import NAS
 from .optimizer import NoTrainerOptimizer, Orchestrate_optimizer
 from .optimizer_tf import TFOptimization
 from .pruning import SUPPORTED_PRUNING_MODE, PrunerConfig, PruningMode
 from .quantization import SUPPORTED_QUANT_MODE, QuantizationMode
 from .utils import (
-    MixedPrecisionConfig,
     BitsAndBytesConfig,
+    MixedPrecisionConfig,
     SmoothQuantConfig,
     WeightOnlyQuantConfig,
     metrics,
     objectives,
 )
 from .utils.utility import LazyImport
-from .modeling import (
-    AutoModelForCausalLM,
-    AutoModel,
-    AutoModelForSeq2SeqLM,
-    OptimizedModel,
-)
